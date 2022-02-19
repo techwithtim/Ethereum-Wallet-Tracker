@@ -50,11 +50,15 @@ def get_transactions(address):
 
 		time = datetime.fromtimestamp(int(tx['timeStamp']))
 		money_in = to.lower() == address.lower()
-
+		isError = tx["isError"] == "1"
+  
 		if money_in:
 			current_balance += value
 		else:
-			current_balance -= value + gas
+			if not isError:
+				current_balance -= value + gas
+			else:
+				current_balance -= gas
 
 		balances.append(current_balance)
 		times.append(time)
